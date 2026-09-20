@@ -62,10 +62,16 @@
                         try {
                             const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
                             const bgColor = window.getComputedStyle(iframeDoc.body).backgroundColor;
-                            document.body.style.backgroundColor = bgColor || 'black';
+                            
+                            // Determine fallback based on device dark mode preference
+                            const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                            const fallback = isDarkMode ? 'black' : 'white';
+                            
+                            document.body.style.backgroundColor = bgColor || fallback;
                         } catch (e) {
-                            // CORS or other issues, use fallback
-                            document.body.style.backgroundColor = 'black';
+                            // CORS or other issues, use fallback based on device preference
+                            const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                            document.body.style.backgroundColor = isDarkMode ? 'black' : 'white';
                         }
                     };
                 } else {
